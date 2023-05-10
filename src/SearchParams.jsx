@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Pet from './Pet'
 import useBreedList from './useBreedList';
+import Results from './Results';
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
@@ -57,7 +58,7 @@ const SearchParams = () => {
     return ( //put the parentheses to tell javascript that im going to the next line
         <div className="search-params">
             <form onSubmit={(e) => { //this is a controlled form not the best way to do forms
-                e.preventDefault();
+                e.preventDefault(); //prevents the form from actually literally
                 requestPets();
             }}>
                 <label htmlFor="location">
@@ -100,15 +101,7 @@ const SearchParams = () => {
                 </label>
                 <button>Submit</button>
             </form>
-            {
-                pets.map((pet) => (
-                    <Pet name={pet.name} animal={pet.animal} breed={pet.breed} key={pet.id} />
-                    /*what happens if i filter the list, for example sorting by breed, animal? i have the same group of elements in the array
-                    but i decided to order differently, according to React in every re render its going to destroy everything inside and rerender from
-                    scratch that its unnecesary, declaring the 'key' you can now have a handle on it, and well just gonna swap the items instead of 
-                    destroy everything, it works as an unique identifier*/
-                ))
-            }
+            <Results pets={pets}/>
         </div> //className is the class atribute used for css and js
     );
 };
