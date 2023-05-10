@@ -1,18 +1,8 @@
-import React from 'react';
 // import ReactDOM from 'react-dom' // import all the react dom things
-import { createRoot } from 'react-dom'; //only import partial things from react-dom 
- 
-//declaring the component
-const Pet = (props) => {
-  return React.createElement("div", "{}", [
-    //array of components
-    React.createElement("h1", {}, props.name),
-    React.createElement("h2", {}, props.animal),
-    React.createElement("h2", {}, props.breed),
-  ]);
-};
+import { createRoot } from 'react-dom/client'; //only import partial things from react-dom 
+import SearchParams from './SearchParams';
 
-//just declaring the component, that is a function component that always return a markup  element
+/*//just declaring the component, that is a function component that always return a markup  element
 const App = () => {
   //App is the name of the component always is required to capitalize the name of the components
   return React.createElement(
@@ -38,14 +28,24 @@ const App = () => {
       }),
     ]
   );
+};*/
+
+//now with jsx
+const App = () => {
+  return( //you have to put a return, because its like is just declared and never used
+    <div>
+      <h1>Adopt Me!</h1>
+      <SearchParams />
+    </div>
+  );
 };
 
 //using it
 const container = document.getElementById("root"); //access the tag/element by id from the dom
 //const root = ReactDOM.createRoot(container); choosing only a method from ReactDOM
 const root = createRoot(container);
-root.render(React.createElement(App)); // the createElement of react can also render directly components, also you can pass (App, {}, null) but no necesary
-
+//root.render(React.createElement(App)); // the createElement of react can also render directly components, also you can pass (App, {}, null) but no necesary
+root.render(<App />); //jsx
 //theory of components made up of components made up of components
 
 //one way data flow:
