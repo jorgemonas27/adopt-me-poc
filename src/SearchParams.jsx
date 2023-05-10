@@ -9,7 +9,7 @@ const SearchParams = () => {
     const [pets, setPets] = useState([]);
     const breeds = [];
 
-    useEffect(() => { //the effect runs every single time that you re render the app
+    useEffect(() => { //the effect runs every single time after that you re render the component
         requestPets();
     }, []);// eslint-disable-line react-hooks/exhaustive-deps, 
       //the second parameter are the dependencies
