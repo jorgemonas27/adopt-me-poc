@@ -1,5 +1,7 @@
 // import ReactDOM from 'react-dom' // import all the react dom things
 import { createRoot } from 'react-dom/client'; //only import partial things from react-dom 
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Details from './Details';
 import SearchParams from './SearchParams';
 
 /*//just declaring the component, that is a function component that always return a markup  element
@@ -30,15 +32,19 @@ const App = () => {
   );
 };*/
 
-//now with jsx
+//now with jsx, whatever you wrap in BrowserRouter is where BrowserRouter is going to be available for use
 const App = () => {
   return( //you have to put a return, because its like is just declared and never used
-    <div>
+    <BrowserRouter> 
       <h1>Adopt Me!</h1>
-      <SearchParams />
-    </div>
+      <Routes>
+        <Route path="/details/:id" element={<Details />} /> 
+        <Route path="/" element={<SearchParams />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
+///details/:id , the :id means that the id is a variable that is coming out of your path
 
 //using it
 const container = document.getElementById("root"); //access the tag/element by id from the dom

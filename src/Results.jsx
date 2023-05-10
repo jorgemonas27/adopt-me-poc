@@ -13,6 +13,7 @@ const Results = ({ pets }) => {
                     //{...pet}
                     //better do it explicit and give the needed things to the component
                     animal={pet.animal}
+                    id={pet.id}
                     name={pet.name}
                     breed={pet.breed}
                     images={pet.images}
