@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Pet from './Pet'
+import useBreedList from './useBreedList';
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
@@ -7,7 +8,7 @@ const SearchParams = () => {
     const [animal, setAnimal] = useState("");
     const [breed, setBreed] = useState("");
     const [pets, setPets] = useState([]);
-    const breeds = [];
+    const [breeds] = useBreedList(animal);
 
     useEffect(() => { //the effect runs every single time after that you re render the component
         requestPets();
@@ -55,7 +56,7 @@ const SearchParams = () => {
 
     return ( //put the parentheses to tell javascript that im going to the next line
         <div className="search-params">
-            <form onSubmit={(e) => {
+            <form onSubmit={(e) => { //this is a controlled form not the best way to do forms
                 e.preventDefault();
                 requestPets();
             }}>
