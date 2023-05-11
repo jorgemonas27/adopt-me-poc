@@ -1,6 +1,6 @@
 // import ReactDOM from 'react-dom' // import all the react dom things
 import { createRoot } from 'react-dom/client'; //only import partial things from react-dom 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
 import Details from './Details';
 import SearchParams from './SearchParams';
 
@@ -36,7 +36,9 @@ const App = () => {
 const App = () => {
   return( //you have to put a return, because its like is just declared and never used
     <BrowserRouter> 
-      <h1>Adopt Me!</h1>
+      <header>
+        <Link to="/">Adopt Me!</Link>
+      </header>
       <Routes>
         <Route path="/details/:id" element={<Details />} /> 
         <Route path="/" element={<SearchParams />} />
