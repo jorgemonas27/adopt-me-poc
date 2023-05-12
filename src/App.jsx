@@ -1,7 +1,9 @@
 // import ReactDOM from 'react-dom' // import all the react dom things
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client'; //only import partial things from react-dom 
 import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
 import Details from './Details';
+import AdoptedPetContext from './AdoptedPetContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchParams from './SearchParams';
 
@@ -45,22 +47,30 @@ const queryClient = new QueryClient({
 
 //now with jsx, whatever you wrap in BrowserRouter is where BrowserRouter is going to be available for use
 const App = () => {
+  const adoptedPetHook = useState(null); //in this case, this is a whole hook
   return( //you have to put a return, because its like is just declared and never used
     <BrowserRouter> 
      <QueryClientProvider client={queryClient}>
-      <header>
-        <Link to="/">Adopt Me!</Link>
-      </header>
-      <Routes>
-        <Route path="/details/:id" element={<Details />} /> 
-        <Route path="/" element={<SearchParams />} />
-      </Routes>
+      <AdoptedPetContext.Provider value={adoptedPetHook}>
+        <header>
+          <Link to="/">Adopt Me!</Link>
+        </header>
+        <Routes>
+          <Route path="/details/:id" element={<Details />} /> 
+          <Route path="/" element={<SearchParams />} />
+        </Routes>
+      </AdoptedPetContext.Provider>
      </QueryClientProvider>
     </BrowserRouter>
   );
 };
+
+//BrowserRouter and QueryClientProvider manages also a context under the hood for all the things underneath them
 ///details/:id , the :id means that the id is a variable that is coming out of your path
 //QueryClientProvider tag is only providing context to all the components underneath it.
+// whats  <AdoptedPetContext.Provider value={adoptedPet}> doing? - It's making the adoptedPet available to any consumer of AdoptedPetContext inside of it
+// -- for example now Details has the adoptedPet available, SearchParams as well
+// --- value={adoptedPet} is a like a transportation method
 
 //using it
 const container = document.getElementById("root"); //access the tag/element by id from the dom

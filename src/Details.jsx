@@ -1,9 +1,11 @@
-import { Link, useParams } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import AdoptedPetContext from './AdoptedPetContext';
 import ErrorBoundary from './ErrorBoundary';
 import Carousel from './Carousel';
 import fetchPet from './fetchPet';
-
+import Modal from './Modal';
 
 /* how useParams() works? 
 - basically because of the context, and the BrowserRouter that is making this thing called context available to components underneath it,
@@ -12,6 +14,11 @@ in other words is coming from the browser component
 */
 
 const Details = () => {
+    const [showModal, setShowModal] = useState(false);
+    //navigate will be use to route someone back to the home page
+    const navigate = useNavigate(); //this is a function from react router and is just a function to programmatically reroute someone to somewhere 
+    // eslint-disable-next-line no-unused-vars
+    const [_, setAdoptedPet] = useContext(AdoptedPetContext); //_ function that im not gonna use it
     const { id } = useParams();
     //here we give a it a key (id) of what we're requesting
     //(["details", id], fetchPet) 
@@ -38,8 +45,25 @@ const Details = () => {
             <div>
                 <h1>{pet.name}</h1>
                 <h2>{pet.animal} - {pet.breed} - {pet.city} - {pet.state}
-                    <button>Adopt {pet.name}</button>
+                    <button onClick={() => setShowModal(true)}>Adopt {pet.name}</button>
                     <p>{pet.description}</p>
+                    {
+                        showModal ?
+                        (
+                            <Modal>
+                                <div>
+                                    <h1>Would you like to adopt {pet.name}?</h1>
+                                    <div className="buttons">
+                                        <button onClick={() => {
+                                        setAdoptedPet(pet); //we set the pet to the AdoptedPetContext
+                                        navigate("/");
+                                        }}>Yes</button>
+                                        <button onClick={() => setShowModal(false)}>No</button>
+                                    </div>
+                                </div>
+                            </Modal>
+                        ) : null //rendering null does nothing
+                    }
                 </h2>
             </div>
         </div>
