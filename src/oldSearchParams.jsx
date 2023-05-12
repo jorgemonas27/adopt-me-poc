@@ -3,7 +3,7 @@ import useBreedList from './useBreedList';
 import Results from './Results';
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
-const SearchParams = () => {
+const OldSearchParams = () => {
     const [location, setLocation] = useState(""); 
     const [animal, setAnimal] = useState("");
     const [breed, setBreed] = useState("");
@@ -105,4 +105,4 @@ const SearchParams = () => {
     );
 };
 
-export default SearchParams;
+export default OldSearchParams;
