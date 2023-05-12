@@ -1,9 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ErrorBoundary from './ErrorBoundary';
 import Carousel from './Carousel';
 import fetchPet from './fetchPet';
-
+import Modal from './Modal';
 
 /* how useParams() works? 
 - basically because of the context, and the BrowserRouter that is making this thing called context available to components underneath it,
@@ -12,6 +13,7 @@ in other words is coming from the browser component
 */
 
 const Details = () => {
+    const [showModal, setShowModal] = useState(false);
     const { id } = useParams();
     //here we give a it a key (id) of what we're requesting
     //(["details", id], fetchPet) 
@@ -38,8 +40,22 @@ const Details = () => {
             <div>
                 <h1>{pet.name}</h1>
                 <h2>{pet.animal} - {pet.breed} - {pet.city} - {pet.state}
-                    <button>Adopt {pet.name}</button>
+                    <button onClick={() => setShowModal(true)}>Adopt {pet.name}</button>
                     <p>{pet.description}</p>
+                    {
+                        showModal ?
+                        (
+                            <Modal>
+                                <div>
+                                    <h1>Would you like to adopt {pet.name}?</h1>
+                                    <div className="buttons">
+                                        <button>Yes</button>
+                                        <button onClick={() => setShowModal(false)}>No</button>
+                                    </div>
+                                </div>
+                            </Modal>
+                        ) : null //rendering null does nothing
+                    }
                 </h2>
             </div>
         </div>
