@@ -1,5 +1,6 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import ErrorBoundary from './ErrorBoundary';
 import Carousel from './Carousel';
 import fetchPet from './fetchPet';
 
@@ -44,5 +45,20 @@ const Details = () => {
         </div>
     );
 };
+//we are not reciving props in details and thats a problem coz if for whatever reason we started passing props to details they were not use properly 
+function DetailsErrorBoundary(props) { //these props are generic props
+    return(
+        <ErrorBoundary errorComponent={ //the errorComponent makes the error boundary more reusable
+            <h2>
+            There was an error with this listing. 
+            <Link to="/">Click here to go back to the home page.</Link>
+        </h2>
+        }>
+            <Details {...props}/> 
+        </ErrorBoundary>
+    )
+}
 
-export default Details;
+// {...props}/> we are using the spread operator since DetailsErrorBoundary does not care about these props at all 
+// basically youre saying, i dont care what props are coming in just go directly through the error boundary
+export default DetailsErrorBoundary; //this component also has the details component so this export is valid
