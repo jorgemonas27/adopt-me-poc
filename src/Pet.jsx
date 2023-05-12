@@ -7,6 +7,10 @@
       React.createElement("h2", {}, props.breed),
     ]);
   };*/
+import { Link } from 'react-router-dom';
+
+//the Link is better than the <a> tag since the <a> tag when you click on it will do a full refresh of the page
+//with link its not gonna be a full page refresh the BrowserRouter captures it on the client side and works better
 
 //this is the same as the code above, functional component
 const Pet = ({name, animal, breed, images, location, id}) => {
@@ -16,7 +20,7 @@ const Pet = ({name, animal, breed, images, location, id}) => {
     }
 
     return (
-        <a href={`/details/${id}`} className="pet">
+        <Link to={`/details/${id}`} className="pet">
           <div className="image-container">
             <img src={hero} alt={name} />
           </div>
@@ -24,7 +28,7 @@ const Pet = ({name, animal, breed, images, location, id}) => {
             <h1>{name}</h1>
             <h2>{animal} - {breed} - {location}</h2>
           </div>
-        </a>
+        </Link>
     );
 };
 

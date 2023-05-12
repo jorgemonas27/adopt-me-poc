@@ -1,77 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query'
+import fetchSearch from './fetchSearch';
 import useBreedList from './useBreedList';
 import Results from './Results';
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
+
+//now the form within the component will be a uncontrolled form
 const SearchParams = () => {
-    const [location, setLocation] = useState(""); 
+    //we are not going to track the location, breed anymore, since now we want to only search when the submit button is clicked
+    const [requestParams, setRequestParams] = useState({
+        location: "",
+        animal:"",
+        breed:"",
+    });
     const [animal, setAnimal] = useState("");
-    const [breed, setBreed] = useState("");
-    const [pets, setPets] = useState([]);
     const [breeds] = useBreedList(animal);
 
-    useEffect(() => { //the effect runs every single time after that you re render the component
-        requestPets();
-    }, []);// eslint-disable-line react-hooks/exhaustive-deps, 
-      //the second parameter are the dependencies
-
-    /*  useEffect(() => {
-        requestPets(); 
-        }); //rerun everytime
-
-        useEffect(() => {
-        requestPets(); 
-    }, [animal]); THIS WILL TELL REACT hey everytime that animal changes i want you to re run the request pets or run the effect
-
-     useEffect(() => {
-        requestPets();
-    }, [location]); THIS WILL TELL REACT hey everytime that location changes i want you to re run the request pets or run the effect
-
-     useEffect(() => {
-        requestPets();
-    }, [breed]); THIS WILL TELL REACT hey everytime that breed changes i want you to re run the request pets or run the effect
-
-     useEffect(() => {
-        requestPets();
-    }, [animal, location, breed]);THIS WILL TELL REACT hey everytime that location,animal,breed changes i want you to re run the request pets or run the effect 
-    */   
-
-    /* why the empty array of dependecies?
-    - you’re basically telling to the effect hey when do i run this effect again? 
-    and with the empty array as a dependency the answer will be never run this again, run it once, after that very first time, never do it again
-    */
-
-    async function requestPets() {
-        const res = await fetch(
-            `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
-        );
-        const json = await res.json();
-        setPets(json.pets);
-    }
-
-
-   /* const locationHook = useState(""); //this will return an array
-    const location = locationHook[0];
-    const setLocation = locationHook[1];*/ //those 3 lines are equivalent to the hook line
-
-    return ( //put the parentheses to tell javascript that im going to the next line
+    const results = useQuery(["search", requestParams], fetchSearch);
+    const pets = results?.data?.pets ?? [];
+    
+    return (
         <div className="search-params">
-            <form onSubmit={(e) => { //this is a controlled form not the best way to do forms
-                e.preventDefault(); //prevents the form from actually literally
-                requestPets();
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target) //this is a browser api, you can fill a form and then it will pull out all of the data on the form into an object
+                const obj = {
+                    animal: formData.get("animal") ?? "",
+                    breed: formData.get("breed") ?? "",
+                    location: formData.get("location") ?? "",
+                };
+                setRequestParams(obj);    
             }}>
                 <label htmlFor="location">
                     Location
-                    <input onChange={e => setLocation(e.target.value) } id="location" value={location} placeholder="Location"></input>
+                    <input name="location" id="location" placeholder="Location"></input>
                 </label>
                 <label htmlFor="animal">
                     Animal
-                    <select //curly {} for introduce js code, 
+                    <select
                         id="animal"
+                        name = "animal"
                         value={animal}
                         onChange={(e) => {
                             setAnimal(e.target.value)
-                            setBreed("");
                         }}>
                        <option/>
                        {
@@ -84,10 +56,9 @@ const SearchParams = () => {
                 </label>
                 <label htmlFor="breed">
                     Breed
-                    <select //curly {} for introduce js code, 
+                    <select
                         id="breed"
-                        value={breed}
-                        onChange={e => setBreed(e.target.value)}
+                        name="breed"
                         disabled={breeds.length === 0} >
                        <option/>
                        {
@@ -101,7 +72,7 @@ const SearchParams = () => {
                 <button>Submit</button>
             </form>
             <Results pets={pets}/>
-        </div> //className is the class atribute used for css and js
+        </div>
     );
 };
 

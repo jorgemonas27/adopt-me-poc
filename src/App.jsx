@@ -1,5 +1,8 @@
 // import ReactDOM from 'react-dom' // import all the react dom things
 import { createRoot } from 'react-dom/client'; //only import partial things from react-dom 
+import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
+import Details from './Details';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchParams from './SearchParams';
 
 /*//just declaring the component, that is a function component that always return a markup  element
@@ -30,15 +33,34 @@ const App = () => {
   );
 };*/
 
-//now with jsx
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity, //its like a question that hey how long do you want me to cache things for our pet api, breedList and all our things
+      cacheTime: Infinity, //its telling once you fetch something dont refetch it
+    }
+  }
+})
+
+
+//now with jsx, whatever you wrap in BrowserRouter is where BrowserRouter is going to be available for use
 const App = () => {
   return( //you have to put a return, because its like is just declared and never used
-    <div>
-      <h1>Adopt Me!</h1>
-      <SearchParams />
-    </div>
+    <BrowserRouter> 
+     <QueryClientProvider client={queryClient}>
+      <header>
+        <Link to="/">Adopt Me!</Link>
+      </header>
+      <Routes>
+        <Route path="/details/:id" element={<Details />} /> 
+        <Route path="/" element={<SearchParams />} />
+      </Routes>
+     </QueryClientProvider>
+    </BrowserRouter>
   );
 };
+///details/:id , the :id means that the id is a variable that is coming out of your path
+//QueryClientProvider tag is only providing context to all the components underneath it.
 
 //using it
 const container = document.getElementById("root"); //access the tag/element by id from the dom
