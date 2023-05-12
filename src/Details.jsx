@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import AdoptedPetContext from './AdoptedPetContext';
 import ErrorBoundary from './ErrorBoundary';
 import Carousel from './Carousel';
 import fetchPet from './fetchPet';
@@ -14,6 +15,10 @@ in other words is coming from the browser component
 
 const Details = () => {
     const [showModal, setShowModal] = useState(false);
+    //navigate will be use to route someone back to the home page
+    const navigate = useNavigate(); //this is a function from react router and is just a function to programmatically reroute someone to somewhere 
+    // eslint-disable-next-line no-unused-vars
+    const [_, setAdoptedPet] = useContext(AdoptedPetContext); //_ function that im not gonna use it
     const { id } = useParams();
     //here we give a it a key (id) of what we're requesting
     //(["details", id], fetchPet) 
@@ -49,7 +54,10 @@ const Details = () => {
                                 <div>
                                     <h1>Would you like to adopt {pet.name}?</h1>
                                     <div className="buttons">
-                                        <button>Yes</button>
+                                        <button onClick={() => {
+                                        setAdoptedPet(pet); //we set the pet to the AdoptedPetContext
+                                        navigate("/");
+                                        }}>Yes</button>
                                         <button onClick={() => setShowModal(false)}>No</button>
                                     </div>
                                 </div>

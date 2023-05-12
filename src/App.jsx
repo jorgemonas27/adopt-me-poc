@@ -47,11 +47,11 @@ const queryClient = new QueryClient({
 
 //now with jsx, whatever you wrap in BrowserRouter is where BrowserRouter is going to be available for use
 const App = () => {
-  const adoptedPet = useState(null);
+  const adoptedPetHook = useState(null); //in this case, this is a whole hook
   return( //you have to put a return, because its like is just declared and never used
     <BrowserRouter> 
      <QueryClientProvider client={queryClient}>
-      <AdoptedPetContext.Provider value={adoptedPet}>
+      <AdoptedPetContext.Provider value={adoptedPetHook}>
         <header>
           <Link to="/">Adopt Me!</Link>
         </header>
